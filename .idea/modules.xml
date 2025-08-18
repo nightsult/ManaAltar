@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ManaAltar.iml" filepath="$PROJECT_DIR$/.idea/modules/ManaAltar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ManaAltar.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ManaAltar.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ManaAltar.test.iml" filepath="$PROJECT_DIR$/.idea/modules/ManaAltar.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mixins.ManaAltar.main.iml" filepath="$PROJECT_DIR$/.idea/modules/mixins.ManaAltar.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.night.ManaAltar.main.iml" filepath="$PROJECT_DIR$/.idea/modules/org.night.ManaAltar.main.iml" />
+    </modules>
+  </component>
+</project>
