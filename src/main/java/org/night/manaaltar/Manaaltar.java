@@ -14,6 +14,7 @@ import org.night.manaaltar.items.Items;
 import org.night.manaaltar.mana.ManaCommands;
 import org.night.manaaltar.mana.Events;
 import org.night.manaaltar.sound.Sounds;
+import org.night.manaaltar.worldgen.ManaWorldgen;
 
 @Mod(Manaaltar.MOD_ID)
 public final class Manaaltar {
@@ -26,8 +27,11 @@ public final class Manaaltar {
         Sounds.SOUND_EVENTS.register(modBus);
 
         modBus.addListener(org.night.manaaltar.network.ManaNet::register);
-
         modBus.addListener(CreativeTab::onBuildTabs);
+
+        ManaWorldgen.FEATURES.register(modBus);
+        ManaWorldgen.CONFIGURED.register(modBus);
+        ManaWorldgen.PLACED.register(modBus);
 
         NeoForge.EVENT_BUS.register(new Dash());
         NeoForge.EVENT_BUS.register(new Bonus());

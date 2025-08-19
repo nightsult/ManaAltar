@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EEE",
+    "EDE",
+    "EEE"
+  ],
+  "key": {
+    "E": {
+      "item": "minecraft:diamond_block"
+    },
+    "D": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "result": {
+    "id": "manaaltar:mana_altar",
+    "count": 1
+  }
+}
