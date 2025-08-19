@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " E ",
+    " N ",
+    " D "
+  ],
+  "key": {
+    "E": {
+      "item": "minecraft:ender_pearl"
+    },
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "D": {
+      "item": "minecraft:diamond_sword"
+    }
+  },
+  "result": {
+    "id": "manaaltar:mana_sword",
+    "count": 1
+  }
+}

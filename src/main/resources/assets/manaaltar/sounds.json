@@ -1,0 +1,7 @@
+{
+  "neres_zap": {
+    "sounds": [
+      { "name": "manaaltar:neres_zap", "stream": false }
+    ]
+  }
+}
