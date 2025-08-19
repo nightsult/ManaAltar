@@ -1,4 +1,3 @@
-// org/night/manaaltar/content/ManaSwordFlatBonus.java
 package org.night.manaaltar.items.mana_sword;
 
 import net.minecraft.network.chat.Component;

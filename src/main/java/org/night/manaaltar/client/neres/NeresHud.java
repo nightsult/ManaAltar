@@ -51,7 +51,6 @@ public final class NeresHud {
         g.drawString(font, killsTxt, killsX, y + 10,   0xFFD670, true);
         g.drawString(font, manaTxt,  manaX,  y + 20,   0xA0FFD6, true);
 
-        // Barrinha de mana
         int barW = 100, barH = 8;
         int filled = Math.max(0, Math.min(barW, (int)Math.round(barW * (mana / (double)max))));
         int bx = w - margin - barW;

@@ -1,4 +1,3 @@
-// org/night/manaaltar/client/state/ClientShake.java
 package org.night.manaaltar.client.state;
 
 public final class ClientShake {
