@@ -17,6 +17,7 @@ public class Blocks {
                     () -> new Altar(BlockBehaviour.Properties.of()
                             .mapColor(MapColor.STONE)
                             .strength(3.5f)
+                            .requiresCorrectToolForDrops()
                             .pushReaction(PushReaction.NORMAL)
                     )
             );
@@ -27,6 +28,7 @@ public class Blocks {
                             .mapColor(MapColor.COLOR_PURPLE)
                             .strength(5.0f)
                             .lightLevel(state -> 7)
+                            .requiresCorrectToolForDrops()
                             .pushReaction(PushReaction.BLOCK)
                     )
             );

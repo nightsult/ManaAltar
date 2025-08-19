@@ -14,7 +14,6 @@ import org.night.manaaltar.blocks.neres.NeresEntity;
 
 @EventBusSubscriber(modid = Manaaltar.MOD_ID, value = Dist.CLIENT)
 public final class NeresHud {
-
     private NeresHud() {}
 
     @SubscribeEvent
@@ -30,27 +29,33 @@ public final class NeresHud {
         if (!(mc.level.getBlockEntity(pos) instanceof NeresEntity be)) return;
 
         int mana = be.getMana();
-        int max = be.getMaxMana();
+        int max  = be.getMaxMana();
+        int kills = be.getCreepersKilled();
 
         GuiGraphics g = event.getGuiGraphics();
         var font = mc.font;
         int w = mc.getWindow().getGuiScaledWidth();
 
         String title = "Altar de Neres";
-        String value = "Mana: " + mana + " / " + max;
+        String killsTxt = "Creepers: " + kills;
+        String manaTxt  = "Mana: " + mana + " / " + max;
 
         int margin = 6;
         int y = 6;
 
         int titleX = w - margin - font.width(title);
-        int valueX = w - margin - font.width(value);
+        int killsX = w - margin - font.width(killsTxt);
+        int manaX  = w - margin - font.width(manaTxt);
 
-        g.drawString(font, title, titleX, y, 0xFFFFFF, true);
-        g.drawString(font, value, valueX, y + 10, 0xA0FFD6, true);
+        g.drawString(font, title,    titleX, y,        0xFFFFFF, true);
+        g.drawString(font, killsTxt, killsX, y + 10,   0xFFD670, true);
+        g.drawString(font, manaTxt,  manaX,  y + 20,   0xA0FFD6, true);
 
+        // Barrinha de mana
         int barW = 100, barH = 8;
         int filled = Math.max(0, Math.min(barW, (int)Math.round(barW * (mana / (double)max))));
-        int bx = w - margin - barW, by = y + 24;
+        int bx = w - margin - barW;
+        int by = y + 34;
 
         g.fill(bx, by, bx + barW, by + barH, 0x88000000);
         g.fill(bx, by, bx + filled, by + barH, 0xFF00D8FF);

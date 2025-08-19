@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.night.manaaltar.blocks.Blocks;
 
 public class Altar extends Block {
 
@@ -25,8 +24,15 @@ public class Altar extends Block {
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!level.isClientSide && stack.is(Items.NETHER_STAR)) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                              Player player, InteractionHand hand, BlockHitResult hit) {
+        if (!stack.is(Items.NETHER_STAR)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        player.swing(hand);
+
+        if (!level.isClientSide) {
             level.playSound(null, pos, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 1.0f, 1.0f);
 
             if (level instanceof ServerLevel serverLevel) {
@@ -37,12 +43,14 @@ public class Altar extends Block {
                 stack.shrink(1);
             }
 
-            level.setBlock(pos, Blocks.NERES_ALTAR.get().defaultBlockState(), 3);
+            if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+                org.night.manaaltar.network.ScreenShake.trigger(sp, 30, 1.0f);
+            }
 
-            return ItemInteractionResult.SUCCESS;
+            level.setBlockAndUpdate(pos, org.night.manaaltar.blocks.Blocks.NERES_ALTAR.get().defaultBlockState());
         }
 
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
 
     private void spawnActivationParticles(ServerLevel level, BlockPos pos) {
