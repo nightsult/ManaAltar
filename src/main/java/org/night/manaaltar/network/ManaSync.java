@@ -19,9 +19,4 @@ public final class ManaSync {
             PacketDistributor.sendToPlayer(sp, new SyncManaPayload(mana, max));
         }
     }
-
-    public static void forceSync(ServerPlayer sp, int mana, int max) {
-        last.put(sp.getUUID(), mana);
-        PacketDistributor.sendToPlayer(sp, new SyncManaPayload(mana, max));
-    }
 }

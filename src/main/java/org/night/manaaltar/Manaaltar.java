@@ -7,14 +7,12 @@ import net.neoforged.neoforge.common.NeoForge;
 import org.night.manaaltar.blocks.AltarBreakRules;
 import org.night.manaaltar.blocks.BlocksEntities;
 import org.night.manaaltar.blocks.Blocks;
-import org.night.manaaltar.client.neres.NeresHud;
 import org.night.manaaltar.content.CreativeTab;
 import org.night.manaaltar.items.mana_sword.Dash;
 import org.night.manaaltar.items.mana_sword.Bonus;
 import org.night.manaaltar.items.Items;
 import org.night.manaaltar.mana.ManaCommands;
 import org.night.manaaltar.mana.Events;
-import org.night.manaaltar.mana.ManaSyncEvents;
 import org.night.manaaltar.sound.Sounds;
 
 @Mod(Manaaltar.MOD_ID)

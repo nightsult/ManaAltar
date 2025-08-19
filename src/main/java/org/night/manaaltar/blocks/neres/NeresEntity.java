@@ -1,4 +1,3 @@
-// org/night/manaaltar/blocks/neres/NeresEntity.java
 package org.night.manaaltar.blocks.neres;
 
 import net.minecraft.core.BlockPos;
@@ -17,7 +16,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.night.manaaltar.blocks.BlocksEntities;
-import org.night.manaaltar.mana.Data;
 
 public class NeresEntity extends BlockEntity {
 
@@ -29,16 +27,16 @@ public class NeresEntity extends BlockEntity {
     // Defesa anti-creeper
     private static final int KILL_RADIUS = 50;
     private static final int MANA_PER_CREEPER = 25;
-    private static final int SWEEP_INTERVAL_TICKS = 20; // 1s
-    private static final int MAX_KILLS_PER_SWEEP = 8;   // teto por varredura
+    private static final int SWEEP_INTERVAL_TICKS = 20;
+    private static final int MAX_KILLS_PER_SWEEP = 8;
 
     private static final String TAG_MANA = "Mana";
     private static final String TAG_CREEPERS = "CreepersKilled";
 
-    private static final int STEAL_RADIUS = 10;           // raio de detecção
-    private static final int STEAL_INTERVAL_TICKS = 5;    // a cada 0.25s
-    private static final int STEAL_PER_PULL = 5;          // quanto transfere por jogador por pulso
-    private static final int STEAL_MAX_PER_SWEEP = 50;    // teto por varredura (pra não drenar tudo de uma vez)
+    private static final int STEAL_RADIUS = 10;
+    private static final int STEAL_INTERVAL_TICKS = 5;
+    private static final int STEAL_PER_PULL = 5;
+    private static final int STEAL_MAX_PER_SWEEP = 50;
 
     private int mana = 0;
     private int creepersKilled = 0;
@@ -50,18 +48,15 @@ public class NeresEntity extends BlockEntity {
     public static void tickServer(Level level, BlockPos pos, BlockState state, NeresEntity be) {
         if (level == null || level.isClientSide) return;
 
-        // ► calcule gt/phase no início (usaremos nas duas varreduras)
         long gt = level.getGameTime();
         long phase = (pos.asLong() & 15L);
 
-        // Geração passiva
         if ((gt % GEN_INTERVAL_TICKS) == 0L && be.mana < MAX_MANA) {
             int old = be.mana;
             be.mana = Math.min(MAX_MANA, be.mana + GEN_AMOUNT);
             if (be.mana != old) be.sync();
         }
 
-        // --- ROUBO DE MANA POR JOGADORES AGACHADOS (com espada de mana na mão) ---
         if (level instanceof ServerLevel sl) {
             if (((gt + phase) % STEAL_INTERVAL_TICKS) == 0L && be.mana > 0) {
 
@@ -85,20 +80,18 @@ public class NeresEntity extends BlockEntity {
                         if (sweepBudget <= 0) break;
 
                         int playerMana = org.night.manaaltar.mana.Data.getMana(sp);
-                        int playerMax  = org.night.manaaltar.mana.Data.MAX_MANA; // ajuste se tiver getter
+                        int playerMax  = org.night.manaaltar.mana.Data.MAX_MANA;
                         int space      = Math.max(0, playerMax - playerMana);
                         if (space <= 0) continue;
 
                         int give = Math.min(Math.min(STEAL_PER_PULL, sweepBudget), space);
                         if (give <= 0) continue;
 
-                        // transfere
                         org.night.manaaltar.mana.Data.addMana(sp, give);
                         be.mana -= give;
                         sweepBudget -= give;
                         changed = true;
 
-                        // partículas nos pés do jogador
                         spawnStealParticles(sl, sp);
                     }
 
@@ -107,7 +100,6 @@ public class NeresEntity extends BlockEntity {
             }
         }
 
-        // --- DEFESA CONTRA CREEPERS ---
         if (((gt + phase) % SWEEP_INTERVAL_TICKS) != 0L) return;
 
         int budget = be.mana / MANA_PER_CREEPER;
@@ -124,7 +116,6 @@ public class NeresEntity extends BlockEntity {
             if (budget <= 0) break;
             if (!(level instanceof ServerLevel sl)) break;
 
-            // som do bloco ANTES de matar (um por creeper)
             float pitch = 0.95f + sl.random.nextFloat() * 0.1f;
             sl.playSeededSound(
                     null,
@@ -136,7 +127,6 @@ public class NeresEntity extends BlockEntity {
                     pos.asLong() ^ gt
             );
 
-            // matar e confirmar
             boolean died = c.hurt(sl.damageSources().fellOutOfWorld(), 1000.0F)
                     || !c.isAlive() || c.isDeadOrDying() || c.isRemoved();
             if (!died) { c.discard(); died = true; }
@@ -154,17 +144,14 @@ public class NeresEntity extends BlockEntity {
 
 
     private static void spawnStealParticles(ServerLevel sl, ServerPlayer sp) {
-        // anel simples de partículas de "encantamento" nos pés
         double y = sp.getY() + 0.05;
         long t = sl.getGameTime();
-        // 10 partículas leves por pulso ~ 2/tick na média (intervalo=5)
         for (int i = 0; i < 10; i++) {
-            double ang = ((t * 0.4) + i * 36.0) * (Math.PI / 180.0); // gira devagar
+            double ang = ((t * 0.4) + i * 36.0) * (Math.PI / 180.0);
             double r = 0.45 + (sl.random.nextDouble() * 0.1);
             double x = sp.getX() + Math.cos(ang) * r;
             double z = sp.getZ() + Math.sin(ang) * r;
 
-            // leve puxão para o centro + subida
             double vx = (sp.getX() - x) * 0.15;
             double vy = 0.05;
             double vz = (sp.getZ() - z) * 0.15;
@@ -179,21 +166,19 @@ public class NeresEntity extends BlockEntity {
         int clamped = Math.max(0, Math.min(MAX_MANA, value));
         if (clamped != this.mana) { this.mana = clamped; sync(); }
     }
-    public void addMana(int delta) { setMana(this.mana + delta); }
-    public void takeMana(int delta) { setMana(this.mana - delta); }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.saveAdditional(tag, provider);
         tag.putInt(TAG_MANA, this.mana);
-        tag.putInt(TAG_CREEPERS, this.creepersKilled); // << salva
+        tag.putInt(TAG_CREEPERS, this.creepersKilled);
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider);
         this.mana = Math.max(0, Math.min(MAX_MANA, tag.getInt(TAG_MANA)));
-        this.creepersKilled = Math.max(0, tag.getInt(TAG_CREEPERS)); // << carrega
+        this.creepersKilled = Math.max(0, tag.getInt(TAG_CREEPERS));
     }
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
